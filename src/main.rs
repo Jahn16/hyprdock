@@ -83,7 +83,6 @@ const DEFAULT_CONFIG: Lazy<OptionalHyprDock> = Lazy::new(|| {
     OptionalHyprDock {
         monitor_name: Some("eDP-1".into()),
         default_external_mode: Some("extend".into()),
-        init_command: Some(HyprdockCommand::empty()),
         open_bar_command: Some(HyprdockCommand::empty()),
         close_bar_command: Some(HyprdockCommand::empty()),
         reload_bar_command: Some(HyprdockCommand::empty()),
@@ -138,7 +137,6 @@ struct HyprDock {
     default_external_mode: String,
     css_string: String,
     monitor_config_path: String,
-    init_command: HyprdockCommand,
     open_bar_command: HyprdockCommand,
     close_bar_command: HyprdockCommand,
     reload_bar_command: HyprdockCommand,
@@ -402,7 +400,6 @@ impl HyprDock {
     }
 
     pub fn socket_connect(&self) {
-        self.init();
         let sock = UnixStream::connect("/var/run/acpid.socket");
         if sock.is_err() {
             println!(
@@ -418,10 +415,6 @@ impl HyprDock {
 
             self.handle_event(data.as_str());
         }
-    }
-
-    pub fn init(&self) {
-        self.execute_command(self.init_command.format(&self.monitor_name));
     }
 
     pub fn lock_system(&self) {
