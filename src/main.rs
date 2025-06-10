@@ -162,7 +162,7 @@ fn main() -> ExitCode {
 
     let dock = parse_config(
         create_config_dir()
-            .map(|path| path.join("hyprdock.toml"))
+            .map(|path| path.join("config.toml"))
             .unwrap_or_default()
             .to_str()
             .expect("Could not convert path to string"),
@@ -248,7 +248,7 @@ fn create_config_dir() -> Result<PathBuf, std::io::Error> {
     if metadata.is_err() {
         panic!("Could not check directory metadata for config file");
     }
-    let file_path = config_dir.join("hyprdock.toml");
+    let file_path = config_dir.join("config.toml");
     if !file_path.exists() {
         fs::File::create(&file_path)?;
     }
